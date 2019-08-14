@@ -1,6 +1,6 @@
 # Example-DDD-CQRS
 
-Simple WebApi architecture on Asp.Net Core
+Simple WebApi architecture in Asp.Net Core
 
 ### Solution Layout
 * API (Application Layer)
