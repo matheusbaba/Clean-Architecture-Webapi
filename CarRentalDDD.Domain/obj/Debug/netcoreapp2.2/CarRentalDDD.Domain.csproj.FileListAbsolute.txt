@@ -1,9 +1,0 @@
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\bin\Debug\netcoreapp2.2\CarRentalDDD.Domain.deps.json
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\bin\Debug\netcoreapp2.2\CarRentalDDD.Domain.dll
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\bin\Debug\netcoreapp2.2\CarRentalDDD.Domain.pdb
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.csprojAssemblyReference.cache
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.csproj.CoreCompileInputs.cache
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.AssemblyInfoInputs.cache
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.AssemblyInfo.cs
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.dll
-D:\Projects\CarRentalDDD\CarRentalDDD.Domain\obj\Debug\netcoreapp2.2\CarRentalDDD.Domain.pdb
