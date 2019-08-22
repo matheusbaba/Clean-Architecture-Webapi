@@ -5,12 +5,12 @@ namespace CarRentalDDD.Domain.Models.Cars
 {
     public class Car : Entity, IAggregateRoot
     {
-        public string Model { get; private set; }
-        public string Make { get; private set; }
-        public string Registration { get; private set; }
-        public int Odometer { get; private set; }
-        public int Year { get; private set; }
-        public ICollection<Maintenance> Maintenances { get; private set; }
+        public virtual string Model { get; private set; }
+        public virtual string Make { get; private set; }
+        public virtual string Registration { get; private set; }
+        public virtual int Odometer { get; private set; }
+        public virtual int Year { get; private set; }
+        public virtual ICollection<Maintenance> Maintenances { get; private set; }
 
         public Car(string model, string make, string registration, int year, int odometer)
         {            

@@ -5,7 +5,7 @@ namespace CarRentalDDD.Domain.SeedWork
 {
     public abstract class Entity
     {
-        public Guid Id { get; private set; }
+        public virtual Guid Id { get; private set; }
 
         private List<IDomainEvent> _domainEvents;
         public List<IDomainEvent> DomainEvents => _domainEvents;

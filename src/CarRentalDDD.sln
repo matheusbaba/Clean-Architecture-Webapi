@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRentalDDD.Infra", "CarRe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CarRentalDDD.Tests", "CarRentalDDD.Tests", "{E81595DC-F71E-4AD0-906B-45B877677982}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentalDDD.Domain.Test", "CarRentalDDD.Domain.Test\CarRentalDDD.Domain.Test.csproj", "{4CA35179-64BF-47C1-A92C-95B940838167}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,9 +31,16 @@ Global
 		{26682770-07CD-45C2-BE42-39ADD947DD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26682770-07CD-45C2-BE42-39ADD947DD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26682770-07CD-45C2-BE42-39ADD947DD45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA35179-64BF-47C1-A92C-95B940838167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA35179-64BF-47C1-A92C-95B940838167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA35179-64BF-47C1-A92C-95B940838167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA35179-64BF-47C1-A92C-95B940838167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4CA35179-64BF-47C1-A92C-95B940838167} = {E81595DC-F71E-4AD0-906B-45B877677982}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9861451-CBA5-414B-B584-2D1824F32CCA}
