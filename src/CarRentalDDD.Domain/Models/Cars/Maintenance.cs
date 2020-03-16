@@ -12,7 +12,7 @@ namespace CarRentalDDD.Domain.Models.Cars
         public Maintenance(DateTime date, string service, string description)
         {
             if (string.IsNullOrEmpty(service))
-                throw CustomException.NullArgument(nameof(service));
+                throw new OArgumentNullException(nameof(Service));
             
             this.Date = date;
             this.Service = service;

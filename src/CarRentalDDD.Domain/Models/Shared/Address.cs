@@ -11,13 +11,13 @@ namespace CarRentalDDD.Domain.Models.Shared
         public Address(string street, string city, string zipCode)
         {            
             if (string.IsNullOrEmpty(street))
-                throw CustomException.NullArgument(nameof(Street));
+                throw new OArgumentNullException(nameof(Street));
 
             if (string.IsNullOrEmpty(city))
-                throw CustomException.NullArgument(nameof(City));
+                throw new OArgumentNullException(nameof(City));
 
             if (string.IsNullOrEmpty(zipCode))
-                throw CustomException.NullArgument(nameof(ZipCode));
+                throw new OArgumentNullException(nameof(ZipCode));
 
             this.Street = street;
             this.City = city;

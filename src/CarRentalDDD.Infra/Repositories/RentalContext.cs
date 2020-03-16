@@ -15,6 +15,10 @@ namespace CarRentalDDD.Infra.Repositories
         {
             Database.EnsureCreated();
         }
+        public RentalContext()
+        {
+
+        }
 
         public DbSet<Car> Cars { get; set; }
         public DbSet<Customer> Customers { get; set; }

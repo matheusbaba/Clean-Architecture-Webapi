@@ -1,4 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using CarRentalDDD.Domain.Models.Cars;
+using CarRentalDDD.Domain.SeedWork;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarRentalDDD.API.Cars.Commands
 {
@@ -20,6 +25,29 @@ namespace CarRentalDDD.API.Cars.Commands
             this.Make = make;
             this.Registration = registration;
             this.Year = year;
+        }
+
+        public class Handler : IRequestHandler<CreateCarCommand, CarDTO>
+        {
+            private readonly IUnitOfWork _uow;
+            private readonly ICarRepository _carRepository;
+            private readonly IMapper _mapper;
+            public Handler(ICarRepository carRepository, IUnitOfWork uow, IMapper mapper)
+            {
+                _carRepository = carRepository;
+                _uow = uow;
+                _mapper = mapper;
+            }
+
+
+            public async Task<CarDTO> Handle(CreateCarCommand request, CancellationToken cancellationToken)
+            {
+                Car car = new Car(request.Model, request.Make, request.Registration, request.Year, request.Odmometer);
+                _carRepository.Add(car);
+                await _uow.CommitAsync(cancellationToken);
+                return _mapper.Map<CarDTO>(car);
+            }
+
         }
     }
 }

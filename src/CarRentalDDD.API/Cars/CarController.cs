@@ -55,7 +55,7 @@ namespace CarRentalDDD.API.Cars
                 CarDTO car = await _mediator.Send(new CreateCarCommand(request.Model, request.Make, request.Registration, request.Odmometer, request.Year));
                 return Created(string.Empty, car);
             }
-            catch (CustomException ex)
+            catch (OException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -74,7 +74,7 @@ namespace CarRentalDDD.API.Cars
                 MaintenanceDTO maintenance = await _mediator.Send(new CreateMaintenanceCommand(CarId, request.Date, request.Service, request.Description));
                 return Created(string.Empty, maintenance);
             }
-            catch (CustomException ex)
+            catch (OException ex)
             {
                 return BadRequest(ex.Message);
             }

@@ -22,7 +22,13 @@ namespace CarRentalDDD.Infra.Repositories
             _rentalContext = rentalContext;
             _mediator = mediator;
         }
-        public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
+
+        /// <summary>
+        /// Save changes in DbContext and dipatch all entity domain events
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
         {            
             int i = await this._rentalContext.SaveChangesAsync(cancellationToken);
             await _mediator.DispatchDomainEventsAsync(_rentalContext);

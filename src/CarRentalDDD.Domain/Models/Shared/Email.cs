@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace CarRentalDDD.Domain.Models.Shared
 {
     public class Email
@@ -15,14 +12,15 @@ namespace CarRentalDDD.Domain.Models.Shared
             this.Value = value;
         }
 
-        public static Email FromString(string value)
-        {
-            return new Email(value);
-        }
+
 
         public override string ToString()
         {
             return Value;
         }
+
+        public static implicit operator Email(string email) => new Email(email);
+        
+ 
     }
 }

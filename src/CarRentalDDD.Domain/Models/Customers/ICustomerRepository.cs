@@ -1,4 +1,4 @@
-﻿using CarRentalDDD.Domain.SeedWork;
+﻿using CarRentalDDD.Domain.SeedWork.Repository;
 
 namespace CarRentalDDD.Domain.Models.Customers
 {

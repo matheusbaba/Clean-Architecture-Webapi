@@ -9,7 +9,7 @@ namespace CarRentalDDD.Domain.Models.Rentals
     public class Rental : Entity, IAggregateRoot
     {
         public DateTime PickUpDate { get; private set; }
-        public DateTime DropOffDate { get; private set; }
+        public DateTime? DropOffDate { get; private set; }
         public Customer Customer { get; private set; }        
         public Car Car { get; private set; }
 
@@ -17,14 +17,24 @@ namespace CarRentalDDD.Domain.Models.Rentals
         {
 
         }
-        public Rental(DateTime pickup, DateTime dropoff, Customer customer, Car car)
+
+        public Rental(DateTime pickup, DateTime? dropoff, Customer customer, Car car)
         {
-            if (pickup > dropoff)
-                throw new CustomException("Drop off date should be greater than Pick up date");
+            if (dropoff != null && pickup > dropoff)
+                throw new OException("Drop off date should be greater than Pick up date");
+
+            this.PickUpDate = pickup;
+            this.DropOffDate = dropoff;
             this.Customer = customer;
             this.Car = car;
 
             this.AddDomainEvent(new RentalCreatedDomainEvent(this));
+        }
+
+
+        public void SetDropOffDate(DateTime date)
+        {
+            this.DropOffDate = date;
         }
     }
 }

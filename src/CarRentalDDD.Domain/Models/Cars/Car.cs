@@ -1,4 +1,5 @@
 ﻿using CarRentalDDD.Domain.SeedWork;
+using System;
 using System.Collections.Generic;
 
 namespace CarRentalDDD.Domain.Models.Cars
@@ -15,16 +16,19 @@ namespace CarRentalDDD.Domain.Models.Cars
         public Car(string model, string make, string registration, int year, int odometer)
         {            
             if (string.IsNullOrEmpty(model))
-                throw CustomException.NullArgument(nameof(model));
+                throw new OArgumentNullException(nameof(Model));
 
             if (string.IsNullOrEmpty(make))
-                throw CustomException.NullArgument(nameof(make));
+                throw new OArgumentNullException(nameof(Make));
 
             if (string.IsNullOrEmpty(registration))
-                throw CustomException.NullArgument(nameof(registration)); 
-
+                throw new OArgumentNullException(nameof(Registration));
+            
             if (year < 1500)
-                throw CustomException.InvalidArgument(nameof(year));
+                throw new OInvalidArgumentException(nameof(Year));
+
+            if (odometer < 0)
+                throw new OInvalidArgumentException(nameof(Odometer));
 
             this.Model = model;
             this.Make = make;
@@ -40,15 +44,15 @@ namespace CarRentalDDD.Domain.Models.Cars
 
         public void UpdateOdometer(int odometer)
         {
+            if (odometer < 0)
+                throw new OInvalidArgumentException(nameof(Odometer));
             this.Odometer = odometer;
         }
 
         public void AddMaintenance(Maintenance maintenance)
         {
-            this.Maintenances.Add(maintenance ?? throw CustomException.NullArgument(nameof(maintenance)));
+            this.Maintenances.Add(maintenance ?? throw new OArgumentNullException(nameof(Maintenance)));
         }
 
     }
-
-
 }

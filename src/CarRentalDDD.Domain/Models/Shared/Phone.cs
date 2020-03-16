@@ -9,7 +9,7 @@ namespace CarRentalDDD.Domain.Models.Shared
         public Phone(string value)
         {
             if(!int.TryParse(value, out int x) || value.Length < 6)
-                throw CustomException.InvalidArgument(nameof(Phone));
+                throw new OInvalidArgumentException(nameof(Phone));
 
             this.Value = value;
         }
@@ -17,5 +17,8 @@ namespace CarRentalDDD.Domain.Models.Shared
         {
             return Value;
         }
+
+
+        public static implicit operator Phone(string phone) => new Phone(phone);
     }
 }

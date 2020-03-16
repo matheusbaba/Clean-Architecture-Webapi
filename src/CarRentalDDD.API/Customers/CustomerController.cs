@@ -55,7 +55,7 @@ namespace CarRentalDDD.API.Customers
                 CustomerDTO customer = await _mediator.Send(command);
                 return Created(string.Empty, customer);
             }
-            catch (CustomException ex)
+            catch (OException ex)
             {
                 return BadRequest(ex.Message);
             }

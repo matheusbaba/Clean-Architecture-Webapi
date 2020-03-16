@@ -44,7 +44,7 @@ namespace CarRentalDDD.API.Rentals
                 RentalDTO rental = await _mediator.Send(command);
                 return Created(string.Empty, rental);
             }
-            catch (CustomException ex)
+            catch (OException ex)
             {
                 return BadRequest(ex.Message);
             }

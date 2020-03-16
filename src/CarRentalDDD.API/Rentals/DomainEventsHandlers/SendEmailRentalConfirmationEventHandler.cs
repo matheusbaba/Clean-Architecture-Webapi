@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CarRentalDDD.API.Rentals.DomainEventsHandlers
 {
+    /// <summary>
+    /// Send email confirmation for every rental created     
+    /// </summary>
     public class SendEmailRentalConfirmationEventHandler : INotificationHandler<RentalCreatedDomainEvent>
     {
         private IEmailSender _emailSender;
@@ -13,6 +16,7 @@ namespace CarRentalDDD.API.Rentals.DomainEventsHandlers
         {
             _emailSender = emailSender;
         }
+        
         public async Task Handle(RentalCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             var email = new Email(
@@ -21,7 +25,7 @@ namespace CarRentalDDD.API.Rentals.DomainEventsHandlers
                 subject: "Car Rental Confirmation",
                 content: "some content"
                 );
-            await _emailSender.SendAsync(email);
+            await _emailSender.SendAsync(email).ConfigureAwait(false);
         }
     }
 }

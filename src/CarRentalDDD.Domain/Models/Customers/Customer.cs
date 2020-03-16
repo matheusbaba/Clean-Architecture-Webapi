@@ -19,30 +19,30 @@ namespace CarRentalDDD.Domain.Models.Customers
         public Customer(string name, string driverLicense, DateTime DOB, Email email, Address address, Phone phone)
         {
             if (string.IsNullOrEmpty(name))
-                throw CustomException.NullArgument(nameof(name));
+                throw new OArgumentNullException(nameof(name));
 
             if (string.IsNullOrEmpty(driverLicense))
-                throw CustomException.NullArgument(nameof(driverLicense));
+                throw new OArgumentNullException(nameof(driverLicense));
 
             this.Name = name;
             this.DriverLicense = driverLicense;
             this.DOB = DOB;
-            this.Address = address ?? throw CustomException.NullArgument(nameof(address));
-            this.Phone = phone ?? throw CustomException.NullArgument(nameof(phone));
-            this.Email = email ?? throw CustomException.NullArgument(nameof(email));
+            this.Address = address ?? throw new OArgumentNullException(nameof(address));
+            this.Phone = phone ?? throw new OArgumentNullException(nameof(phone));
+            this.Email = email ?? throw new OArgumentNullException(nameof(email));
         }
 
         public void UpdateEmail(Email email)
         {
-            this.Email = email ?? throw CustomException.NullArgument(nameof(email));
+            this.Email = email ?? throw new OArgumentNullException(nameof(email));
         }
         public void UpdatePhone(Phone phone)
         {
-            this.Phone = phone ?? throw CustomException.NullArgument(nameof(phone));
+            this.Phone = phone ?? throw new OArgumentNullException(nameof(phone));
         }
         public void UpdateAddress(Address address)
         {
-            this.Address = address ?? throw CustomException.NullArgument(nameof(address));
+            this.Address = address ?? throw new OArgumentNullException(nameof(address));
         }
 
     }
