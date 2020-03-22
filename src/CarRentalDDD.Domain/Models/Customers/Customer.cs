@@ -1,6 +1,8 @@
-﻿using CarRentalDDD.Domain.Models.Shared;
+﻿using CarRentalDDD.Domain.Models.Rentals;
+using CarRentalDDD.Domain.Models.Shared;
 using CarRentalDDD.Domain.SeedWork;
 using System;
+using System.Collections.Generic;
 
 namespace CarRentalDDD.Domain.Models.Customers
 {
@@ -12,6 +14,7 @@ namespace CarRentalDDD.Domain.Models.Customers
         public DateTime DOB { get; private set; }
         public Address Address { get; private set; }
         public Phone Phone { get; private set; }
+        public ICollection<Rental> Rentals { get; private set; }
 
         protected Customer()
         {

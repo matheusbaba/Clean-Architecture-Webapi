@@ -35,10 +35,9 @@ namespace CarRentalDDD.API.Cars.Commands
             {
                 var query = new QueryRepository<Car>();
                 query.AddSpecification(CarRepositoryHelper.Specifications.ByModel(request.Model));
-                query.AddSpecification(SpecificationType.Or, CarRepositoryHelper.Specifications.ByMake(request.Make));
-                query.AddInclusion(CarRepositoryHelper.Inclusions.Maintenances());
+                query.AddSpecification(SpecificationType.And, CarRepositoryHelper.Specifications.ByMake(request.Make));               
 
-                IEnumerable<Car> cars = await _carRepository.FindAllAsync(query);
+                IEnumerable<Car> cars = await _carRepository.GetAllAsync(query);
                 return _mapper.Map<IEnumerable<CarDTO>>(cars);
             }
         }

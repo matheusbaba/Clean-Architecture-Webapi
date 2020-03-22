@@ -10,14 +10,14 @@ namespace CarRentalDDD.Infra.Repositories
     {
         private readonly RentalContext _rentalContext;
         private readonly IMediator _mediator;
-        
+
         public void Dispose()
         {
             _rentalContext.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        public UnitOfWork(RentalContext rentalContext, IMediator mediator )
+        public UnitOfWork(RentalContext rentalContext, IMediator mediator)
         {
             _rentalContext = rentalContext;
             _mediator = mediator;
@@ -29,7 +29,7 @@ namespace CarRentalDDD.Infra.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {            
+        {
             int i = await this._rentalContext.SaveChangesAsync(cancellationToken);
             await _mediator.DispatchDomainEventsAsync(_rentalContext);
             return i;
@@ -38,6 +38,6 @@ namespace CarRentalDDD.Infra.Repositories
         public void Rollback()
         {
             throw new System.NotImplementedException();
-        }   
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace CarRentalDDD.Infra.Repositories.Cars
                 x.Property(t => t.Date).HasColumnName("Date").IsRequired();
                 x.Property(t => t.Service).HasColumnName("Service").IsRequired();
                 x.Property(t => t.Description).HasColumnName("Description");
-                x.HasForeignKey("CarId");
+                x.WithOwner().HasForeignKey("CarId");
             });
         }
     }

@@ -79,32 +79,33 @@ namespace CarRentalDDD.Domain.SeedWork.Repository
         /// <returns></returns>
         public Expression<Func<TEntity, bool>> GetSpecificationExpression()
         {
-            Expression<Func<TEntity, bool>> expression = _specifications[0].ToExpression;
-            var parameter = Expression.Parameter(typeof(TEntity));
+            Expression<Func<TEntity, bool>> expression = _specifications[0].Criteria;
 
-            BinaryExpression binaryExpressionTemp;
+            var parameter = Expression.Parameter(typeof(TEntity), "t");
+
             for (int i = 1; i < _specifications.Count; i++)
             {
+                var leftVisitor = new ReplaceExpressionVisitor(expression.Parameters[0], parameter);
+                var left = leftVisitor.Visit(expression.Body);
+                var rightVisitor = new ReplaceExpressionVisitor(_specifications[i].Criteria.Parameters[0], parameter);
+                var right = rightVisitor.Visit(_specifications[i].Criteria.Body);
+
                 switch (_specificationType[i])
                 {
-                    case SpecificationType.And:                        
-                        binaryExpressionTemp = Expression.And(expression.Body, _specifications[i].ToExpression.Body);
-                        expression = Expression.Lambda<Func<TEntity, bool>>(binaryExpressionTemp, parameter);
+                    case SpecificationType.And:
+                        expression = Expression.Lambda<Func<TEntity, bool>>(Expression.And(left, right), parameter);
                         break;
 
-                    case SpecificationType.Or:
-                        binaryExpressionTemp = Expression.Or(expression.Body, _specifications[i].ToExpression.Body);
-                        expression = Expression.Lambda<Func<TEntity, bool>>(binaryExpressionTemp, parameter);
+                    case SpecificationType.Or:                        
+                        expression = Expression.Lambda<Func<TEntity, bool>>(Expression.Or(left, right), parameter);
                         break;
 
                     case SpecificationType.AndNot:
-                        binaryExpressionTemp = Expression.And(expression.Body, Expression.Not(_specifications[i].ToExpression.Body));
-                        expression = Expression.Lambda<Func<TEntity, bool>>(binaryExpressionTemp, parameter);
+                        expression = Expression.Lambda<Func<TEntity, bool>>(Expression.And(left, Expression.Not(right)), parameter);
                         break;
 
-                    case SpecificationType.OrNot:
-                        binaryExpressionTemp = Expression.Or(expression.Body, Expression.Not(_specifications[i].ToExpression.Body));
-                        expression = Expression.Lambda<Func<TEntity, bool>>(binaryExpressionTemp, parameter);
+                    case SpecificationType.OrNot:                        
+                        expression = Expression.Lambda<Func<TEntity, bool>>(Expression.Or(left, Expression.Not(right)), parameter);
                         break;
 
                     default:
@@ -117,5 +118,26 @@ namespace CarRentalDDD.Domain.SeedWork.Repository
 
 
         public bool HasSpecifications => _specifications.Count > 0;
+    }
+
+
+    internal class ReplaceExpressionVisitor
+    : ExpressionVisitor
+    {
+        private readonly Expression _oldValue;
+        private readonly Expression _newValue;
+
+        public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
+        {
+            _oldValue = oldValue;
+            _newValue = newValue;
+        }
+
+        public override Expression Visit(Expression node)
+        {
+            if (node == _oldValue)
+                return _newValue;
+            return base.Visit(node);
+        }
     }
 }

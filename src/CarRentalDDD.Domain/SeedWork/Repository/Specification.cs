@@ -44,12 +44,12 @@ namespace CarRentalDDD.Domain.SeedWork.Repository
         //    _expression = Expression.Lambda<Func<T, bool>>(binaryExpression, parameter);
         //    return this;
         //}
-        public Expression<Func<T, bool>> ToExpression { get; }
+        public Expression<Func<T, bool>> Criteria { get; }
 
 
-        public Specification(Expression<Func<T, bool>> expression)
+        public Specification(Expression<Func<T, bool>> criteria)
         {
-            ToExpression = expression;
+            Criteria = criteria;
         }
 
     }

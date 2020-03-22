@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace CarRentalDDD.Infra.Emails
@@ -8,10 +8,16 @@ namespace CarRentalDDD.Infra.Emails
     /// </summary>
     public class EmailSender : IEmailSender
     {
-        public async Task SendAsync(Email email)
+        private ILogger<EmailSender> _logger;
+
+        public EmailSender(ILogger<EmailSender> logger)
         {
-            Debug.Write("EmailSender.SendAsync(email) - not implemented");
-            return;
+            _logger = logger;
+        }
+        public Task SendAsync(Email email)
+        {
+            _logger.LogInformation("Sending email...");
+            return Task.Run(() => _logger.LogWarning("EmailSender.SendAsync(email) - not implemented"));
         }
     }
 }

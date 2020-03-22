@@ -1,6 +1,7 @@
 ﻿using CarRentalDDD.Domain.Models.Rentals.DomainEvents;
 using CarRentalDDD.Infra.Emails;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ namespace CarRentalDDD.API.Rentals.DomainEventsHandlers
                 subject: "Car Rental Confirmation",
                 content: "some content"
                 );
-            await _emailSender.SendAsync(email).ConfigureAwait(false);
+            await _emailSender.SendAsync(email).ConfigureAwait(false);            
         }
     }
 }

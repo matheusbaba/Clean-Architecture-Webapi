@@ -40,7 +40,7 @@ namespace CarRentalDDD.API.Customers.Commands
                 var query = new QueryRepository<Customer>();
                 query.AddSpecification(CustomerRepositoryHelper.Specifications.ByName(request.Name));
                 query.AddSpecification(SpecificationType.And, CustomerRepositoryHelper.Specifications.ByDriverLicense(request.DriverLicense));
-                IEnumerable<Customer> customers = await _customerRepository.FindAllAsync(query);
+                IEnumerable<Customer> customers = await _customerRepository.GetAllAsync(query);
                 return _mapper.Map<IEnumerable<CustomerDTO>>(customers);
             }
         }

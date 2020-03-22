@@ -1,9 +1,9 @@
 ﻿using CarRentalDDD.Domain.Models.Cars;
-using CarRentalDDD.Domain.SeedWork;
+using CarRentalDDD.Domain.SeedWork.Repository;
 using CarRentalDDD.Infra.Cars.Repositories;
 using CarRentalDDD.Infra.Repositories;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.Moq;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,118 +14,187 @@ namespace CarRentalDDD.Infra.Tests.Repositories.Cars
     public class CarRepositoryTests
     {
 
-        private DbContextOptions<RentalContext> _dbContextOptions => new DbContextOptionsBuilder<RentalContext>()
-                         .UseInMemoryDatabase(databaseName: "in_memory_db_tests")
-                         .Options;
+        IList<Car> _cars;
 
-        private IList<Car> GetCarList() => new List<Car>()
+        public CarRepositoryTests()
         {
-            new Car("model1", "make1", "reg1", 2000, 5000),
-            new Car("model2", "make2", "reg2", 2100, 6000),
-            new Car("model3", "make3", "reg3", 2200, 7000)
-        };
+            _cars = new List<Car>();
+            for (int i = 1; i <= 5; i++)
+                _cars.Add(new Car("model" + i, "make" + i, "reg" + i, 2000, 2000));
+        }
+
 
         [Fact]
-        public void Add_RunOnlyOnce()
+        public void Add_ShouldWork()
         {
+            // Arrange
+            var car = _cars[0];
             var dbContextMock = new Mock<RentalContext>();
-            ICarRepository rep = new CarRepository(dbContextMock.Object);
+            var dbSetMock = new Mock<DbSet<Car>>();
+            dbContextMock.Setup(t => t.Set<Car>()).Returns(dbSetMock.Object);
 
-            rep.Add(GetCarList()[0]);
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            carRepository.Add(car);
 
-            dbContextMock.Verify(mock => mock.Add(It.IsAny<Car>()), Times.Once());
+            // Assert
+            dbContextMock.Verify(t => t.Set<Car>(), Times.Once);
+            dbSetMock.Verify(t => t.Add(It.IsAny<Car>()), Times.Once);
         }
 
         [Fact]
-        public void Remove_RunOnlyOnce()
+        public void Update_ShouldWork()
         {
+            // Arrange
+            var car = _cars[0];
+
             var dbContextMock = new Mock<RentalContext>();
-            ICarRepository rep = new CarRepository(dbContextMock.Object);
+            var dbSetMock = new Mock<DbSet<Car>>();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(dbSetMock.Object);
 
-            rep.Remove(GetCarList()[0]);
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            carRepository.Update(car);
 
-            dbContextMock.Verify(mock => mock.Remove(It.IsAny<Car>()), Times.Once());
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            dbSetMock.Verify(mock => mock.Update(It.IsAny<Car>()), Times.Once());
         }
 
         [Fact]
-        public void Update_RunOnlyOnce()
+        public void Remove_ShouldWork()
         {
+            // Arrange
+            var car = _cars[0];
             var dbContextMock = new Mock<RentalContext>();
-            ICarRepository rep = new CarRepository(dbContextMock.Object);
+            var dbSetMock = new Mock<DbSet<Car>>();
+            dbContextMock.Setup(t => t.Set<Car>()).Returns(dbSetMock.Object);
 
-            rep.Update(GetCarList()[0]);
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            carRepository.Remove(car);
 
-            dbContextMock.Verify(mock => mock.Update(It.IsAny<Car>()), Times.Once());
+            // Assert
+            dbContextMock.Verify(t => t.Set<Car>(), Times.Once);
+            dbSetMock.Verify(t => t.Remove(It.IsAny<Car>()), Times.Once);
         }
 
 
         [Fact]
-        public async void FindAllAsync_ShouldWork()
+        public async void GetAllAsync_ShouldWork()
         {
-            // Insert seed data into the database using one instance of the context
-            using (var dbContext = new RentalContext(_dbContextOptions))
-            {
-                GetCarList().ToList().ForEach(t => dbContext.Add(t));
-                dbContext.SaveChanges();
-            }
+            // Arrange
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
 
-            // Use a clean instance of the context to run the test
-            using (var dbContext = new RentalContext(_dbContextOptions))
-            {
-                var expected = GetCarList().Count;
-                ICarRepository rep = new CarRepository(dbContext);
-                var result = await rep.FindAllAsync();
-                Assert.Equal(expected, result.Count());
-            }
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var result = await carRepository.GetAllAsync();
+
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            Assert.Equal(_cars.Count, result.Count());
+        }
+
+        [Fact]
+        public async void FirstAsync_ShouldReturnFirstOne()
+        {
+            // Arrange
+            var expected = _cars[0];
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
+
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var result = await carRepository.FirstAsync();
+
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);            
+            Assert.Equal(expected, result);
         }
 
 
-        //[Fact]
-        //public async void Add_ShouldWork()
-        //{
-        //    var car = _cars[0];
+        [Fact]
+        public async void FirstAsync_ShouldReturnNull()
+        {
+            // Arrange
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
 
-        //    // Run the test against one instance of the context
-        //    using (var dbContext = new RentalContext(_dbContextOptions))
-        //    {
-        //        var mockMediatR = new Mock<IMediator>();
-        //        mockMediatR.Setup(t => t.Publish(It.IsAny<object>(),It.IsAny<System.Threading.CancellationToken>())).Callback(() => { });
-        //        var uow = new UnitOfWork(dbContext, mockMediatR.Object);
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var query = new QueryRepository<Car>();
+            query.AddSpecification(CarRepositoryHelper.Specifications.ByMake("NOTEXIST"));
+            var result = await carRepository.FirstAsync(query);
 
-        //        ICarRepository rep = new CarRepository(dbContext);
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            Assert.Null(result);
+        }
 
-        //        rep.Add(car);
-        //        await uow.CommitAsync(System.Threading.CancellationToken.None);
-        //    }
 
-        //    // Use a separate instance of the context to verify correct data was saved to database
-        //    using (var dbContext = new RentalContext(_dbContextOptions))
-        //    {
-        //        var inserted = dbContext.Cars.SingleOrDefault();
-        //        Assert.NotNull(inserted);
-        //        Assert.True(car.Id == inserted.Id);
-        //    }
-        //}
+        [Fact]
+        public async void SingleAsync_ShouldReturnOne()
+        {
+            // Arrange
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
 
-        //[Fact]
-        //public async void FindAllAsync_ShouldWork()
-        //{
-        //    // Insert data into the database using one instance of the context
-        //    using (var context = new RentalContext(_dbContextOptions))
-        //    {
-        //        for (int i = 0; i < _cars.Count -1; i++)
-        //            context.Cars.Add(_cars[i]);                                
-        //        context.SaveChanges();
-        //    }          
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var query = new QueryRepository<Car>();
+            query.AddSpecification(CarRepositoryHelper.Specifications.ByMake("make1"));
+            var result = await carRepository.SingleAsync(query);
 
-        //    // Use a clean instance of the context to run the test
-        //    using (var context = new RentalContext(_dbContextOptions))
-        //    {
-        //        ICarRepository rep = new CarRepository(context);
-        //        var result = await rep.FindAllAsync(new CarsByFiltersSpecification("model1", ""));
-        //        Assert.Equal(2, result.Count());
-        //    }
-        //} 
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async void SingleAsync_ShouldReturnNull()
+        {
+            // Arrange
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
+
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var query = new QueryRepository<Car>();
+            query.AddSpecification(CarRepositoryHelper.Specifications.ByMake("NOTEXIST"));
+            var result = await carRepository.SingleAsync(query);
+
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            Assert.Null(result);
+        }
+
+
+
+        [Fact]
+        public void SingleAsync_ReturnsMoreThanOne_ThrowsException()
+        {
+            // Arrange
+            var dbContextMock = new Mock<RentalContext>();
+            var mockDbSet = _cars.AsQueryable().BuildMockDbSet();
+            dbContextMock.Setup(x => x.Set<Car>()).Returns(mockDbSet.Object);
+
+            // Act
+            var carRepository = new CarRepository(dbContextMock.Object);
+            var query = new QueryRepository<Car>();
+            query.AddSpecification(CarRepositoryHelper.Specifications.ByMake("make"));
+            Car result = null;
+            Assert.ThrowsAsync<System.Exception>(async () => result = await carRepository.SingleAsync(query));
+
+            // Assert
+            dbContextMock.Verify(x => x.Set<Car>(), Times.Once);
+            
+        }
 
 
     }

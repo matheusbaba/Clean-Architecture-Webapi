@@ -1,4 +1,5 @@
-﻿using CarRentalDDD.Domain.SeedWork;
+﻿using CarRentalDDD.Domain.Models.Rentals;
+using CarRentalDDD.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 
@@ -12,9 +13,10 @@ namespace CarRentalDDD.Domain.Models.Cars
         public virtual int Odometer { get; private set; }
         public virtual int Year { get; private set; }
         public virtual ICollection<Maintenance> Maintenances { get; private set; }
+        public ICollection<Rental> Rentals { get; private set; }
 
         public Car(string model, string make, string registration, int year, int odometer)
-        {            
+        {
             if (string.IsNullOrEmpty(model))
                 throw new OArgumentNullException(nameof(Model));
 
@@ -23,7 +25,7 @@ namespace CarRentalDDD.Domain.Models.Cars
 
             if (string.IsNullOrEmpty(registration))
                 throw new OArgumentNullException(nameof(Registration));
-            
+
             if (year < 1500)
                 throw new OInvalidArgumentException(nameof(Year));
 

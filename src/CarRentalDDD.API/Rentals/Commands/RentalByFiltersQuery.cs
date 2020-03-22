@@ -61,7 +61,7 @@ namespace CarRentalDDD.API.Rentals.Commands
                 query.AddInclusion(RentalRepositoryHelper.Inclusions.Cars());
                 query.AddInclusion(RentalRepositoryHelper.Inclusions.Customers());
 
-                IEnumerable<Rental> rentals = await _rentalRepository.FindAllAsync(query);
+                IEnumerable<Rental> rentals = await _rentalRepository.GetAllAsync(query);
                 return _mapper.Map<IEnumerable<RentalDTO>>(rentals);
             }
 

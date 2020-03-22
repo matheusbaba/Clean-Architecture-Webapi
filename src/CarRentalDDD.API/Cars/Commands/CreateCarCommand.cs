@@ -15,7 +15,7 @@ namespace CarRentalDDD.API.Cars.Commands
 
         public string Registration { get; set; }
 
-        public int Odmometer { get; set; }
+        public int Odometer { get; set; }
 
         public int Year { get; set; }
 
@@ -24,6 +24,7 @@ namespace CarRentalDDD.API.Cars.Commands
             this.Model = model;
             this.Make = make;
             this.Registration = registration;
+            this.Odometer = odometer;
             this.Year = year;
         }
 
@@ -40,9 +41,9 @@ namespace CarRentalDDD.API.Cars.Commands
             }
 
 
-            public async Task<CarDTO> Handle(CreateCarCommand request, CancellationToken cancellationToken)
+            public async Task<CarDTO> Handle(CreateCarCommand command, CancellationToken cancellationToken)
             {
-                Car car = new Car(request.Model, request.Make, request.Registration, request.Year, request.Odmometer);
+                Car car = new Car(command.Model, command.Make, command.Registration, command.Year, command.Odometer);
                 _carRepository.Add(car);
                 await _uow.CommitAsync(cancellationToken);
                 return _mapper.Map<CarDTO>(car);

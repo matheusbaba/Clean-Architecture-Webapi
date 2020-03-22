@@ -20,7 +20,7 @@ namespace CarRentalDDD.Infra.Repositories
             _context.Set<TEntity>().Add(entity);
         }
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(IQueryRepository<TEntity> queryRepository = null)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(IQueryRepository<TEntity> queryRepository = null)
         {
             var query = _context.Set<TEntity>().AsQueryable();
             if (queryRepository != null)
@@ -31,24 +31,24 @@ namespace CarRentalDDD.Infra.Repositories
                     var expression = queryRepository.GetSpecificationExpression();
                     return await query.Where(expression).AsNoTracking().ToListAsync();
                 }
-                
+
             }
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<TEntity> FirstAsync(IQueryRepository<TEntity> queryRepository)
+        public async Task<TEntity> FirstAsync(IQueryRepository<TEntity> queryRepository = null)
         {
             var query = _context.Set<TEntity>().AsQueryable();
-            query = AddIncludes(queryRepository.GetInclusions(), query);
-            if (queryRepository.HasSpecifications)
+            if (queryRepository != null)
             {
-                var expression = queryRepository.GetSpecificationExpression();
-                return await query.FirstOrDefaultAsync(expression);
+                query = AddIncludes(queryRepository.GetInclusions(), query);
+                if (queryRepository.HasSpecifications)
+                {
+                    var expression = queryRepository.GetSpecificationExpression();
+                    return await query.FirstOrDefaultAsync(expression);
+                }
             }
-            else
-            {
-                return await query.FirstOrDefaultAsync();
-            }
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<TEntity> SingleAsync(IQueryRepository<TEntity> queryRepository)
@@ -76,7 +76,7 @@ namespace CarRentalDDD.Infra.Repositories
         {
             _context.Set<TEntity>().Update(entity);
         }
-               
+
 
         private IQueryable<TEntity> AddIncludes(IEnumerable<IInclusion<TEntity>> inclusions, IQueryable<TEntity> query)
         {

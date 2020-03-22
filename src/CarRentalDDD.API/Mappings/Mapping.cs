@@ -6,7 +6,7 @@ using CarRentalDDD.Domain.Models.Cars;
 using CarRentalDDD.Domain.Models.Customers;
 using CarRentalDDD.Domain.Models.Rentals;
 
-namespace CarRentalDDD.API.Helpers
+namespace CarRentalDDD.API.Mappings
 {
     public class Mapping : Profile
     {

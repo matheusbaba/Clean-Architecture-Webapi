@@ -16,6 +16,7 @@ namespace CarRentalDDD.API.Cars.Requests
         public int Odmometer { get; set; }
 
         [Required]
+        [Range(1800, 3000)]
         public int Year { get; set; }
     }
 }
