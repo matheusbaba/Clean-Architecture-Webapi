@@ -26,12 +26,12 @@ namespace CarRentalDDD.API.Cars.Commands
 
 
 
-        public class CarCommandHandler : IRequestHandler<CreateMaintenanceCommand, MaintenanceDTO>
+        public class Handler : IRequestHandler<CreateMaintenanceCommand, MaintenanceDTO>
         {
             private readonly IUnitOfWork _uow;
             private readonly ICarRepository _carRepository;
             private readonly IMapper _mapper;
-            public CarCommandHandler(ICarRepository carRepository, IUnitOfWork uow, IMapper mapper)
+            public Handler(ICarRepository carRepository, IUnitOfWork uow, IMapper mapper)
             {
                 _carRepository = carRepository;
                 _uow = uow;

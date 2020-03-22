@@ -28,7 +28,7 @@ namespace CarRentalDDD.API.Rentals.Commands
 
 
 
-        public class RentalCommandHandler: IRequestHandler<CreateRentalCommand, RentalDTO>
+        public class Handler : IRequestHandler<CreateRentalCommand, RentalDTO>
         {
             private readonly IUnitOfWork _uow;
             private readonly IRentalRepository _rentalRepository;
@@ -36,7 +36,7 @@ namespace CarRentalDDD.API.Rentals.Commands
             private readonly ICustomerRepository _customerRepository;
             private readonly IMapper _mapper;
 
-            public RentalCommandHandler(
+            public Handler(
                 IUnitOfWork uow,
                 IRentalRepository rentalRepository,
                 ICarRepository carRepository,

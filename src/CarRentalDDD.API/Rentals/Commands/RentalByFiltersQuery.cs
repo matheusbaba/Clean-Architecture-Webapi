@@ -25,14 +25,14 @@ namespace CarRentalDDD.API.Rentals.Commands
 
 
 
-        public class RentalCommandHandler : IRequestHandler<RentalByFiltersQuery, IEnumerable<RentalDTO>>
+        public class Handler : IRequestHandler<RentalByFiltersQuery, IEnumerable<RentalDTO>>
         {
             private readonly IRentalRepository _rentalRepository;
             private readonly ICarRepository _carRepository;
             private readonly ICustomerRepository _customerRepository;
             private readonly IMapper _mapper;
 
-            public RentalCommandHandler(
+            public Handler(
                 IRentalRepository rentalRepository,
                 ICarRepository carRepository,
                 ICustomerRepository customerRepository,
