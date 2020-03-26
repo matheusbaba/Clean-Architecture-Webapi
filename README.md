@@ -4,6 +4,7 @@ This project was built to serve as a reference for new Asp.Net Core WebApis.
 
 ## Technologies Used
 
+* C#
 * Asp.Net Core 3.1
 * Asp.Net Core WebApi
 * AutoMapper
