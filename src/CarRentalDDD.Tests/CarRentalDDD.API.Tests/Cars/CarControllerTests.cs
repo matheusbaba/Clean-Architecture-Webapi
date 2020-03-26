@@ -21,12 +21,14 @@ namespace CarRentalDDD.API.Tests.Cars
         {
             var expected = new CarWithMaintenancesDTO();
             var mediatorMock = new Mock<IMediator>();
-            var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
+            var logger = new Mock<ILogger<CarController>>();            
             mediatorMock.Setup(t => t.Send(It.IsAny<CarByIdQuery>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(expected));
 
+            var controller = new CarController(mediatorMock.Object, logger.Object);
+
             var response = await controller.Get(expected.Id);
+
             var okResult = Assert.IsType<OkObjectResult>(response.Result);
             var car = Assert.IsAssignableFrom<CarWithMaintenancesDTO>(okResult.Value);
             Assert.Equal(expected, car);
@@ -38,10 +40,10 @@ namespace CarRentalDDD.API.Tests.Cars
             CarWithMaintenancesDTO car = null;
             var mediatorMock = new Mock<IMediator>();
             var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
-
             mediatorMock.Setup(t => t.Send(It.IsAny<CarByIdQuery>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(car));
+
+            var controller = new CarController(mediatorMock.Object, logger.Object);            
 
             var response = await controller.Get(Guid.NewGuid());
             Assert.IsType<NotFoundResult>(response.Result);
@@ -55,10 +57,10 @@ namespace CarRentalDDD.API.Tests.Cars
             };
             var mediatorMock = new Mock<IMediator>();
             var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
-
             mediatorMock.Setup(t => t.Send(It.IsAny<CarByFiltersQuery>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(expected));
+
+            var controller = new CarController(mediatorMock.Object, logger.Object);            
 
             var response = await controller.Get("make", "model");
             var okResult = Assert.IsType<OkObjectResult>(response.Result);
@@ -77,11 +79,13 @@ namespace CarRentalDDD.API.Tests.Cars
                 Registration = "Reg",
                 Year = 2000
             };
-            var mediatorMock = new Mock<IMediator>();
-            var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
+            var mediatorMock = new Mock<IMediator>();            
             mediatorMock.Setup(t => t.Send(It.IsAny<CreateCarCommand>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(expected));
+            var logger = new Mock<ILogger<CarController>>();
+
+            var controller = new CarController(mediatorMock.Object, logger.Object);
+            
 
             ValidateModelState(createCarRequest, controller);
             var response = await controller.Post(createCarRequest);
@@ -97,9 +101,10 @@ namespace CarRentalDDD.API.Tests.Cars
             var createCarRequest = new CreateCarRequest();
             var mediatorMock = new Mock<IMediator>();
             var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
 
+            var controller = new CarController(mediatorMock.Object, logger.Object);
             ValidateModelState(createCarRequest, controller);
+
             var response = await controller.Post(createCarRequest);
 
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(response);
@@ -122,10 +127,11 @@ namespace CarRentalDDD.API.Tests.Cars
             };
         
             var mediatorMock = new Mock<IMediator>();
-            var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
+            var logger = new Mock<ILogger<CarController>>();            
             mediatorMock.Setup(t => t.Send(It.IsAny<CreateMaintenanceCommand>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(expected));
+
+            var controller = new CarController(mediatorMock.Object, logger.Object);
 
             ValidateModelState(createMaintenanceRequest, controller);
             var response = await controller.Post(Guid.NewGuid(), createMaintenanceRequest);
@@ -141,9 +147,10 @@ namespace CarRentalDDD.API.Tests.Cars
             var createMaintenanceRequest = new CreateMaintenanceRequest();
             var mediatorMock = new Mock<IMediator>();
             var logger = new Mock<ILogger<CarController>>();
-            var controller = new CarController(mediatorMock.Object, logger.Object);
 
+            var controller = new CarController(mediatorMock.Object, logger.Object);
             ValidateModelState(createMaintenanceRequest, controller);
+
             var response = await controller.Post(Guid.NewGuid(), createMaintenanceRequest);
 
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(response);
