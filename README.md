@@ -1,4 +1,4 @@
-# Example-DDD-CQRS
+# Clean-Architecture-Webapi
 
 This project was built to serve as a reference for new Asp.Net Core WebApis.
 
